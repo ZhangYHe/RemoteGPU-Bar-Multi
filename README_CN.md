@@ -6,6 +6,8 @@
 ![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![Requires](https://img.shields.io/badge/requires-SwiftBar-orange)
 
+![中文说明](README_CN.md) ![English](README.md)
+
 **RemoteGPU-Bar** 是一个基于 Shell 脚本的 [SwiftBar](https://github.com/swiftbar/SwiftBar) 插件。它通过 SSH 连接到你的 Linux 服务器，运行 `nvidia-smi` 命令，并将结果解析为美观、直观的 macOS 菜单栏信息。
 
 **特点：**
