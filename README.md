@@ -1,6 +1,99 @@
 # RemoteGPU-Bar 🟢
 ![icon](icon.png)
 
+> An extremely lightweight, zero-deployment macOS menu bar widget used to monitor NVIDIA GPU status on remote servers via SSH.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)
+![Requires](https://img.shields.io/badge/requires-SwiftBar-orange)
+
+**RemoteGPU-Bar** is a [SwiftBar](https://github.com/swiftbar/SwiftBar) plugin based on Shell scripting. It connects to your Linux server via SSH, executes the `nvidia-smi` command, and parses the results into a beautiful, intuitive macOS menu bar display.
+
+---
+
+## ✨ Features
+
+* 🚀 **Zero Dependencies**: No need to install Python, Node.js, or any web services on the server side. Only SSH and `nvidia-smi` are required.
+* 👀 **At a Glance**: The menu bar persistently displays the number of idle GPUs (e.g., `GPU: 2/4 Free`).
+* 📊 **Detailed Data**: Click the dropdown to show each card's name, memory usage, and utilization rate.
+* 🎨 **Smart Coloring**: Idle GPUs are marked with green 🟢, while busy ones are marked with red 🔴.
+* 🔤 **Perfect Alignment**: Uses monospaced font (Menlo) to ensure numbers are displayed neatly.
+* 🖥️ **Quick Terminal**: One-click to open an SSH terminal connection to the server.
+
+---
+
+## 📸 Screenshot
+
+![Screenshot](screenshot.png)
+
+---
+
+## 🛠 Prerequisites
+
+Before using this plugin, please ensure you meet the following conditions:
+
+1. **macOS**: Your computer is a Mac.
+2. **SwiftBar**: Installed [SwiftBar](https://github.com/swiftbar/SwiftBar/releases) (a free and open-source menu bar customization tool).
+3. **Passwordless SSH Login**: Your Mac must be configured with SSH key pairs and be able to log in to the target server **without a password**.
+    * *Test Method: Type `ssh user@your_server_ip` in the terminal. If you log in successfully without being prompted for a password, you are ready.*
+
+---
+
+## 📥 Installation
+
+1. **Download the Script**:
+   Download the `gpu_monitor.1m.sh` file from this repository to your local computer.
+   *(Note: The `.1m.` in the filename represents a refresh every 1 minute; you can modify this as needed).*
+
+2. **Add to Plugin Folder**:
+   Open SwiftBar, click the menu bar icon -> `Open Plugin Folder...`, and drop the downloaded `.sh` file into that directory.
+
+3. **Grant Execution Permissions**:
+   Open your terminal and run the following command (replace the path with your actual plugin directory):
+   ```bash
+   chmod +x ~/Documents/SwiftBar/gpu_monitor.1m.sh
+   ```
+ ⚙️ Configuration (Important!)
+You need to modify the script file to match your server information.
+
+Open gpu_monitor.1m.sh using a text editor (Recommended: VSCode, Sublime Text, or terminal nano; do not use the default macOS TextEdit).
+
+Modify the configuration area at the top of the script:
+
+```Bash
+# ================= CONFIGURATION AREA =================
+# 1. Change to your server's SSH username and IP address
+HOST="user@your_server_ip"
+
+# 2. Change to the absolute path of your local Mac SSH private key
+# Usually ~/.ssh/id_rsa or ~/.ssh/id_ed25519
+ID_FILE="/Users/YOUR_USERNAME/.ssh/id_rsa"
+# ======================================================
+Save the file. SwiftBar will usually detect the change and refresh automatically. You can also manually click the menu bar -> Refresh All.
+```
+
+---
+
+## ❓ FAQ
+Q: Menu bar shows "GPU: Offline 🔴"? 
+A: This means the SSH connection failed. Please check:
+Whether your network can connect to the server.
+Whether the HOST and ID_FILE paths in the script are correct.
+Click the menu to view the red error message details. If it says "Host verification failed," please connect to the server manually once in the terminal and type yes to accept the host fingerprint.
+
+Q: Why is the text in the menu gray? 
+A: Ensure you are using the latest version of the script. The script must include interactive attributes like refresh=true or shell=... for macOS to render it in the normal highlight color.
+
+Q: How do I change the refresh frequency? 
+A: Change the middle part of the script filename. For example, changing .1m. to .30s. sets the refresh to every 30 seconds. It is recommended not to go below 10s to avoid unnecessary SSH connection pressure on the server.
+
+---
+
+## 📄 License
+MIT License © 2026 zeyu  
+
+[Chinese Version]
+
 > 一个极其轻量、无需服务器端部署的 macOS 菜单栏小组件，用于通过 SSH 监控远程服务器的 NVIDIA GPU 状态。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -74,6 +167,8 @@ ID_FILE="/Users/你的用户名/.ssh/id_rsa"
 ```
 保存文件。SwiftBar 通常会自动检测到更改并刷新，你也可以手动点击菜单栏 -> Refresh All。
 
+---
+
 ## ❓ 常见问题 (FAQ)
 Q: 菜单栏显示 "GPU: Offline 🔴"？ 
 A: 这意味着 SSH 连接失败。请检查：
@@ -86,6 +181,8 @@ A: 请确保你使用的是最新版的脚本。脚本中必须包含 refresh=tr
 
 Q: 如何修改刷新频率？ 
 A: 修改脚本文件名的中间部分。例如，将 .1m. 改为 .30s. 就是 30 秒刷新一次。建议不要低于 10s，以免给服务器造成不必要的 SSH 连接压力。
+
+---
 
 ## 📄 License
 MIT License © 2026 zeyu
