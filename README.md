@@ -7,6 +7,8 @@
 ![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![Requires](https://img.shields.io/badge/requires-SwiftBar-orange)
 
+![中文说明](README_CN.md) ![English](README.md)
+
 **RemoteGPU-Bar** is a [SwiftBar](https://github.com/swiftbar/SwiftBar) plugin based on Shell scripting. It connects to your Linux server via SSH, executes the `nvidia-smi` command, and parses the results into a beautiful, intuitive macOS menu bar display.
 
 ---
