@@ -55,7 +55,10 @@ Before using this plugin, please ensure you meet the following conditions:
    ```bash
    chmod +x ~/Documents/SwiftBar/gpu_monitor.1m.sh
    ```
- ⚙️ Configuration (Important!)
+
+---
+
+## ⚙️ Configuration (Important!)
 You need to modify the script file to match your server information.
 
 Open gpu_monitor.1m.sh using a text editor (Recommended: VSCode, Sublime Text, or terminal nano; do not use the default macOS TextEdit).
