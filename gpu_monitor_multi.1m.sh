@@ -5,8 +5,8 @@ SSH_CMD="/usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5"
 
 # ===== Host 列表 =====
 HOSTS=(
-  "xxx",
-  "yyy",
+  "xxx"
+  "yyy"
   "zzz"
 )
 
