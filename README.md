@@ -1,4 +1,33 @@
-# RemoteGPU-Bar 🟢
+# RemoteGPU-Bar-Multi 🟢
+
+**macos状态栏自动检测多台服务器gpt可用情况**
+
+## 使用流程
+
+>forked from ZeyuuuChen/RemoteGPU-Bar
+
+1.安装SwiftBar   
+2.修改`gpu_monitor_multi.1m.sh`文件，文件名中1m可自定义如10m,表示10min检查一次状态   
+3.修改Host列表,把xxx，yyy改为ssh config文件中的Host名称    
+
+```
+Host alias1
+    HostName hostname
+    User user
+
+Host alias1
+    HostName hostname
+    User user
+```
+对应的
+```
+# ===== Host 列表 =====
+HOSTS=(
+  "alias1",
+  "alias2"
+)
+```
+
 ![icon](icon.png)
 
 > An extremely lightweight, zero-deployment macOS menu bar widget used to monitor NVIDIA GPU status on remote servers via SSH.
