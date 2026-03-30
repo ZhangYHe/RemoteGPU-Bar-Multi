@@ -1,96 +1,185 @@
-# RemoteGPU-Bar 🟢[中文说明]
+# RemoteGPU-Bar-Multi
+
+这是一个基于原始 `RemoteGPU-Bar` 改出来的 fork，核心目标是支持在 macOS 菜单栏里同时查看多台服务器的 GPU 空闲情况。
+
+这个仓库保留了原来的单机脚本，同时新增了多机版本脚本，适合已经通过 SSH 管理多台 GPU 服务器的使用场景。
+
 ![icon](icon.png)
-> 一个极其轻量、无需服务器端部署的 macOS 菜单栏小组件，用于通过 SSH 监控远程服务器的 NVIDIA GPU 状态。
+
+[English README](README.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![Requires](https://img.shields.io/badge/requires-SwiftBar-orange)
 
-![中文说明](README_CN.md) ![English](README.md)
+## 这个 Fork 做了什么
 
-**RemoteGPU-Bar** 是一个基于 Shell 脚本的 [SwiftBar](https://github.com/swiftbar/SwiftBar) 插件。它通过 SSH 连接到你的 Linux 服务器，运行 `nvidia-smi` 命令，并将结果解析为美观、直观的 macOS 菜单栏信息。
+- 原仓库主要是单服务器监控。
+- 当前仓库新增了 `gpu_monitor_multi.1m.sh`，用于多服务器聚合监控。
+- 多机版脚本依赖你本机 `~/.ssh/config` 里的 Host 别名。
+- 原来的 `gpu_monitor.1m.sh` 仍然保留，方便单机使用。
 
-**特点：**
-* 🚀 **零依赖**：服务器端无需安装 Python、Node.js 或任何 Web 服务。只要有 SSH 和 `nvidia-smi` 即可。
-* 👀 **一目了然**：菜单栏常驻显示空闲 GPU 数量（例如 `GPU: 2/4 Free`）。
-* 📊 **详细数据**：点击下拉展示每张卡的名称、显存占用和利用率。
-* 🎨 **智能着色**：空闲显卡显示绿色 🟢，忙碌显卡显示红色 🔴。
-* 🔤 **完美对齐**：使用等宽字体 (Menlo)，数字显示整齐治愈。
-* 🖥️ **快捷终端**：一键打开 SSH 终端连接到服务器。
+## 功能说明
 
----
+- 不需要在服务器端部署额外服务。
+- 菜单栏顶部显示所有在线服务器的 GPU 总空闲数，例如 `GPU: 5/16 Free`。
+- 下拉菜单按服务器分组展示每张卡的状态。
+- 如果某台服务器离线，会直接显示为 `Offline`。
+- 刷新频率由 SwiftBar 脚本文件名控制。
 
-## 📸 预览截图
+## 预览
 
 ![Screenshot](screenshot.png)
 
+## 仓库文件说明
 
----
+- `gpu_monitor_multi.1m.sh`：多服务器版本，推荐使用。
+- `gpu_monitor.1m.sh`：原始单服务器版本。
 
-## 🛠 前置要求
+## 前置要求
 
-在使用此插件之前，请确保你满足以下条件：
+1. 你的电脑是 macOS。
+2. 已安装 [SwiftBar](https://github.com/swiftbar/SwiftBar/releases)。
+3. 你的 Mac 能通过 SSH 免密连接到目标服务器。
+4. 目标服务器上可以直接执行 `nvidia-smi`。
 
-1.  **macOS**: 你的电脑是 Mac。
-2.  **SwiftBar**: 已安装 [SwiftBar](https://github.com/swiftbar/SwiftBar/releases) (一个免费开源的菜单栏管理工具)。
-3.  **SSH 免密登录**: 你的 Mac 必须配置了 SSH 密钥对，并能**免密码**登录到目标服务器。
-    * *测试方法：在终端输入 `ssh user@your_server_ip`，如果不需要输入密码直接登录成功，即满足要求。*
-
----
-
-## 📥 安装步骤
-
-1.  **下载脚本**：
-    将本仓库中的 `gpu_monitor.1m.sh` 文件下载到你的本地电脑。
-    *(注意文件名中的 `.1m.` 代表每 1 分钟刷新一次，你可以按需修改)*
-
-2.  **放入插件目录**：
-    打开 SwiftBar，点击菜单栏图标 -> `Open Plugin Folder...`，将下载的 `.sh` 文件拖入该目录。
-
-3.  **赋予执行权限**：
-    打开终端，运行以下命令（替换为你实际的插件目录路径）：
-    ```bash
-    chmod +x ~/Documents/SwiftBar/gpu_monitor.1m.sh
-    ```
-
----
-
-## ⚙️ 配置方法 (重要!)
-
-你需要修改脚本文件以匹配你的服务器信息。
-
-使用文本编辑器（推荐 VSCode, Sublime Text 或终端 nano，**不要用自带的文本编辑**）打开 `gpu_monitor.1m.sh`。
-
-修改脚本顶部的配置区域：
+建议先手动验证 SSH：
 
 ```bash
-# ================= 配置区域 =================
-# 1. 修改为你的服务器 SSH 用户名和 IP 地址
-HOST="user@your_server_ip"
-
-# 2. 修改为你 Mac 本地的 SSH 私钥绝对路径
-# 通常是 ~/.ssh/id_rsa 或 ~/.ssh/id_ed25519
-ID_FILE="/Users/你的用户名/.ssh/id_rsa"
-# ===========================================
+ssh alias1
+ssh alias2
 ```
-保存文件。SwiftBar 通常会自动检测到更改并刷新，你也可以手动点击菜单栏 -> Refresh All。
 
----
+如果这两个命令都能直接登录，不需要输入密码，多机脚本基本就可以正常工作。
 
-## ❓ 常见问题 (FAQ)
-Q: 菜单栏显示 "GPU: Offline 🔴"？ 
-A: 这意味着 SSH 连接失败。请检查：
-你的网络能否连接到服务器。
-脚本中 HOST 和 ID_FILE 路径是否正确。
-点击菜单，查看红色的报错信息详情。如果是 "Host verification failed"，请先在终端手动连接一次服务器并输入 yes 接受主机指纹。
+## 多服务器使用流程
 
-Q: 为什么菜单里的字是灰色的？ 
-A: 请确保你使用的是最新版的脚本。脚本中必须包含 refresh=true 或 shell=... 等交互属性，macOS 才会将其渲染为正常的高亮颜色。
+### 1. 在本机配置 SSH 别名
 
-Q: 如何修改刷新频率？ 
-A: 修改脚本文件名的中间部分。例如，将 .1m. 改为 .30s. 就是 30 秒刷新一次。建议不要低于 10s，以免给服务器造成不必要的 SSH 连接压力。
+编辑 `~/.ssh/config`，为每台服务器配置一个 Host：
 
----
+```sshconfig
+Host alias1
+    HostName your.server.one
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519
 
-## 📄 License
-MIT License © 2026 zeyu
+Host alias2
+    HostName your.server.two
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+这里的 `alias1`、`alias2` 就是后面脚本里要填写的名字。
+
+### 2. 安装 SwiftBar 插件
+
+把 `gpu_monitor_multi.1m.sh` 复制到 SwiftBar 的插件目录中。
+
+如果你想调整刷新频率，可以直接改文件名：
+
+- `gpu_monitor_multi.1m.sh`：每 1 分钟刷新
+- `gpu_monitor_multi.5m.sh`：每 5 分钟刷新
+- `gpu_monitor_multi.30s.sh`：每 30 秒刷新
+
+然后赋予执行权限：
+
+```bash
+chmod +x ~/Documents/SwiftBar/gpu_monitor_multi.1m.sh
+```
+
+如果你的 SwiftBar 插件目录不是这个路径，请替换成实际路径。
+
+### 3. 修改脚本中的 Host 列表
+
+打开 `gpu_monitor_multi.1m.sh`，修改顶部的 `HOSTS`：
+
+```bash
+HOSTS=(
+  "alias1"
+  "alias2"
+  "alias3"
+)
+```
+
+每一项都必须和 `~/.ssh/config` 里的 `Host` 名称完全一致。
+
+### 4. 刷新 SwiftBar
+
+保存脚本后：
+
+1. SwiftBar 通常会自动刷新。
+2. 如果没有刷新，可以点击菜单栏图标，选择 `Refresh All`。
+
+## 脚本当前的判定逻辑
+
+多机脚本会对每台服务器执行：
+
+```bash
+nvidia-smi --query-gpu=index,name,utilization.gpu,memory.free,memory.total --format=csv,noheader,nounits
+```
+
+当前把 GPU 视为“空闲”的条件是：
+
+- 利用率小于 `5%`
+- 空闲显存大于 `4000 MB`
+
+顶部栏展示的是所有在线服务器聚合后的空闲数和总数。
+
+## 单服务器脚本怎么用
+
+如果你只想监控一台服务器，也可以继续使用 `gpu_monitor.1m.sh`。
+
+它和多机版的配置方式不同：
+
+- 单机版用的是 `HOST="user@your_server_ip"`
+- 单机版需要手动指定 `ID_FILE="/path/to/private_key"`
+
+所以如果你的需求是多台机器统一看，优先用 `gpu_monitor_multi.1m.sh`。
+
+## 常见问题
+
+### 顶部显示 `GPU: Offline`
+
+通常意味着下面几种情况之一：
+
+- `~/.ssh/config` 里的别名没有配好
+- SSH 免密登录没有配通
+- 服务器当前无法连接
+- 远端没有 `nvidia-smi`
+
+建议先手动执行：
+
+```bash
+ssh alias1
+```
+
+确认 SSH 本身没有问题。
+
+### 某台机器在下拉菜单里显示 `Offline`
+
+说明脚本没有成功从这台机器取到 GPU 信息。优先检查：
+
+- Host 别名是否写对
+- 网络是否可达
+- 该机器是否装好了 NVIDIA 驱动
+- `nvidia-smi` 是否能正常执行
+
+### 如何修改刷新频率
+
+直接改脚本文件名即可。SwiftBar 是通过文件名里的时间后缀识别刷新频率的，不是通过脚本内容识别。
+
+### 能不能用于 Slurm 集群
+
+当前脚本是按照直接执行 `nvidia-smi` 的模式写的，更适合普通 GPU 服务器，或者可以直接在登录节点访问 GPU 信息的环境。
+
+如果你的集群必须通过 `srun`、`sinfo`、`squeue` 才能拿到资源状态，那就需要你自己再改脚本命令逻辑。
+
+## 致谢
+
+- 原始项目：`ZeyuuuChen/RemoteGPU-Bar`
+- 当前仓库是在原项目基础上增加多服务器支持的 fork
+
+## License
+
+MIT License
