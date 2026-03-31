@@ -122,7 +122,7 @@ nvidia-smi --query-gpu=index,name,utilization.gpu,memory.free,memory.total --for
 The script currently treats a GPU as "free" when:
 
 - GPU utilization is below `5%`
-- Free memory is above `4000 MB`
+- `mem_free >= mem_total/2`
 
 The top bar shows the global free/total count across all reachable servers.
 

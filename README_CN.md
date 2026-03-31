@@ -122,7 +122,7 @@ nvidia-smi --query-gpu=index,name,utilization.gpu,memory.free,memory.total --for
 当前把 GPU 视为“空闲”的条件是：
 
 - 利用率小于 `5%`
-- 空闲显存大于 `4000 MB`
+- `mem_free >= mem_total/2`
 
 顶部栏展示的是所有在线服务器聚合后的空闲数和总数。
 

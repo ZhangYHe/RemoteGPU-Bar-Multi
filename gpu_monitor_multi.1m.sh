@@ -51,7 +51,7 @@ for HOST in "${HOSTS[@]}"; do
     split(name, a, "-")
     name = a[1]
 
-    if (util < 5 && mem_free > 4000)
+    if (util < 5 && mem_free >= mem_total/2)
       icon="🟢"
     else
       icon="🔴"
